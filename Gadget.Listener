@@ -1,0 +1,133 @@
+package de.xlightbtw.listener;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.EventHandler;
+
+
+import de.xlightbtw.APIS.ItemBuilder;
+import de.xlightbtw.main.Main;
+import de.xlightbtw.utils.Data;
+
+public class Gadgets implements Listener {
+	private Main plugin;
+	private Inventory inventory;
+
+
+	public Gadgets(Main plugin) {
+		this.plugin = plugin;
+	}
+
+	FileConfiguration cfg = Main.getPlugin().getConfig();
+
+	@EventHandler
+	public void onInteract(PlayerInteractEvent e) {
+		FileConfiguration cfg = Main.getPlugin().getConfig();
+		if (e.getPlayer().getItemInHand() != null) {
+			if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				if (e.getPlayer().getItemInHand().getType() == Material.CHEST) {
+					Player p = e.getPlayer();
+					Inventory inv = Bukkit.createInventory(null, 9 * 5, "§5§lGadgets");
+					e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.CHEST_OPEN, 5, 1);
+
+
+					new BukkitRunnable() {
+
+						@Override
+						public void run() {
+							inv.setItem(0, new ItemBuilder(Material.STAINED_GLASS_PANE, 1).setName("§8").build());
+							inv.setItem(8, new ItemBuilder(Material.STAINED_GLASS_PANE, 1).setName("§8").build());
+							inv.setItem(18, new ItemBuilder(Material.STAINED_GLASS_PANE, 1).setName("§8").build());
+							inv.setItem(26, new ItemBuilder(Material.STAINED_GLASS_PANE, 1).setName("§8").build());
+
+
+						}
+					}.runTaskLater(plugin, 15L);
+					p.openInventory(inv);
+
+					new BukkitRunnable() {
+
+						@Override
+						public void run() {
+							inv.setItem(1, new ItemBuilder(Material.STAINED_GLASS_PANE, 1).setName("§8").build());
+							inv.setItem(2, new ItemBuilder(Material.STAINED_GLASS_PANE, 1).setName("§8").build());
+							inv.setItem(7, new ItemBuilder(Material.STAINED_GLASS_PANE, 1).setName("§8").build());
+							inv.setItem(9, new ItemBuilder(Material.STAINED_GLASS_PANE, 1).setName("§8").build());
+							inv.setItem(17, new ItemBuilder(Material.STAINED_GLASS_PANE, 1).setName("§8").build());
+							inv.setItem(19, new ItemBuilder(Material.STAINED_GLASS_PANE, 1).setName("§8").build());
+							inv.setItem(25, new ItemBuilder(Material.STAINED_GLASS_PANE, 1).setName("§8").build());
+
+						}
+					}.runTaskLater(plugin, 20L);
+					p.openInventory(inv);
+
+					new BukkitRunnable() {
+
+						@Override
+						public void run() {
+							inv.setItem(19, new ItemBuilder(Material.FISHING_ROD, 1).setName("§6§lEnterhaken").setLore("§7Verwende es, um dich durch die Lobby zu schwingen!").build());
+							inv.setItem(22, new ItemBuilder(Material.SNOW_BALL, 1).setName("§b§lSchneemann").setLore("§7Verwende es, um eine Schneeball Schlacht zu machen!").build());
+							inv.setItem(25, new ItemBuilder(Material.ENDER_PEARL, 1).setName("§5§lEnderperle").setLore("§7Verwende es, um deine Gegner zu verwirren!").build());
+							inv.setItem(4, new ItemBuilder(Material.FEATHER, 1).setName("§c§lJetpack").setLore("§7Verwende es, um über deine Gegner zu gelangen!").build());
+							inv.setItem(40, new ItemBuilder(Material.BARRIER, 1).setName("§c§lKein Gadget ausgewählt").setLore("§7Gehe auf §5Gadgets!").build());
+							p.playSound(p.getLocation(), Sound.ITEM_PICKUP, 6, 1);
+
+						}
+					}.runTaskLater(plugin, 25L);
+
+
+					p.openInventory(inv);
+				}
+			}
+		}
+	}
+					@EventHandler
+					public void onGadgets(PlayerInteractEvent e) {
+						if(e.getItem() != null && e.getItem().getType() == Material.CHEST) {
+							e.getPlayer().openInventory(inventory);
+							e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.CHEST_OPEN, 5, 1);
+							e.setCancelled(true);
+						}
+
+					}
+					@EventHandler
+					public void onClick(InventoryClickEvent e) {
+						if (e.getClickedInventory() != null && e.getClickedInventory().getName().equalsIgnoreCase("§5§lGadgets")) {
+							Player p = (Player) e.getWhoClicked();
+							if(e.getCurrentItem() !=null && e.getCurrentItem().getType() !=Material.AIR) {
+								Material material = e.getCurrentItem().getType();
+								if(material == Material.FISHING_ROD) {
+									p.getInventory().setItem(1, new ItemBuilder(Material.FISHING_ROD, 1).setName("§6§lEnterhaken").setLore("§7Verwende es, um dich durch die Lobby zu schwingen!").build());
+								} else if(material == Material.SNOW_BALL) {
+									p.getInventory().setItem(1, new ItemBuilder(Material.SNOW_BALL, 32).setName("§b§lSchneemann").setLore("§7Verwende es, um eine Schneeball Schlacht zu machen!").build());
+								} else if(material == Material.ENDER_PEARL) {
+									p.getInventory().setItem(1, new ItemBuilder(Material.ENDER_PEARL, 16).setName("§5§lEnderperle").setLore("§7Verwende es, um deine Gegner zu verwirren!").build());
+								} else if(material == Material.FEATHER) {
+									p.getInventory().setItem(1, new ItemBuilder(Material.FEATHER, 1).setName("§c§lJetpack").setLore("§7Verwende es, um über deine Gegner zu gelangen!").build());
+								} else if(material == Material.BARRIER) {
+									p.getInventory().setItem(1, new ItemBuilder(Material.BARRIER, 1).setName("§c§lKein Gadget ausgewählt").setLore("§7Gehe auf §5Gadgets§7!").build());
+								} else {
+									p.sendMessage(Data.Prefix + "§cDieses Gadget funktioniert noch nicht!");
+								}
+								p.updateInventory();
+								p.closeInventory();
+								p.playSound(p.getLocation(), Sound.NOTE_BASS_DRUM, 5, 1);
+							} else
+								e.setCancelled(true);
+
+
+						}else
+							e.setCancelled(true);
+					}
+
+
+}
